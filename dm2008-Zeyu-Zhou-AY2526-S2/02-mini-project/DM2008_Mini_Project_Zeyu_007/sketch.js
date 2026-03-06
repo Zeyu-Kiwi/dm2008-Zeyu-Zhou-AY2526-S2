@@ -136,7 +136,7 @@ function pauseGame(){
 /* ----------------- Input ----------------- */
 function keyPressed() {
   // make the bird flap on space or UP arrow
-  if ((key === ' ' || keyCode === UP_ARROW) && !gameOver) {
+  if ((key === ' ' || keyCode === UP_ARROW) && !gameOver && !gamePause) {
     gameStart = true;
     bird.flap();
   }

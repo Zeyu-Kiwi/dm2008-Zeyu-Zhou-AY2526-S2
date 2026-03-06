@@ -19,10 +19,8 @@ class Bird {
   flap() {
     // instant upward kick (negative velocity = up)
     this.vel.y = this.flapStrength;
-    if(!gamePause){
         jump.setVolume(0.3);
         jump.play();
-    }
   }
 
   update() {
