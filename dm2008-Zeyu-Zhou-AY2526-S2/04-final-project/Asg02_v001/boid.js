@@ -4,9 +4,9 @@ class Boid{
         this.velocity = p5.Vector.random2D();
         this.velocity.setMag(random(2, 4));
         this.acceleration = createVector();
-        this.maxForce = 0.5; // how fast boids turn to aligin. Controllable
-        this.maxSpeed = 4; //Controllable
-        this.perceptionRaiuds = 50; //Controllable
+        this.maxForce = 0.5; // how fast boids turn to aligin. Controllable slider
+        this.maxSpeed = random(2, 4); //Controllable slider
+        this.perceptionRaiuds = 50; //Controllable slider
     }
 
     // boids teleports back from the other side of the screen
@@ -26,7 +26,6 @@ class Boid{
 
     //check all the boids within the raiuds, calculate and return the average direction and steer towards it
     align(boids){
-        //let perceptionRaiuds = 50; //make this a button
         let steeringVel = createVector();
         let totalBoidInRadius = 0;
 
@@ -49,7 +48,6 @@ class Boid{
 
     // check all the boids within the radious, calculate and return the average position and steer towards it
     cohesion(boids){
-        //let perceptionRaiuds = 50; //make this a button
         let desireLoc = createVector();
         let totalBoidInRadius = 0;
 
@@ -73,16 +71,15 @@ class Boid{
 
      // check all the boids within the radious, calculate and return the average position and steer towards it
     seperation(boids){
-        //let perceptionRaiuds = 50; //make this a button
         let desireLoc = createVector();
         let totalBoidInRadius = 0;
 
         for(let other of boids){
             let d = dist(this.position.x, this.position.y, other.position.x, other.position.y);
-            if(other != this && d < this.perceptionRaiuds){
+            if(other != this && d < this.perceptionRaiuds && d > 0){
                 let diff = p5.Vector.sub(this.position, other.position)
-                diff.mult(1 / d); // difference to be inverstly proportion to distance. How does this line achieve this? 
-                //I feel like I can control the proportion part to affect how violently boids react to distance. Maybe create a responseForce and multiply by diff?
+                diff.div(d * d);
+                //diff.mult(xxxSlider.value()); //repel porportion force
                 desireLoc.add(diff); // add all diff value
                 totalBoidInRadius++;
             }
@@ -121,25 +118,21 @@ class Boid{
         this.acceleration.mult(0); // to prevent acceleration keep stacking in create chaos behaviour
     }
 
-    show(){      
+    show(h,w, size){      
         // Calculate angle of heading
         let theta = this.velocity.heading() + PI / 2;
   
-        stroke(200, 100);
-        fill(255, 100);
+        noStroke();
+        fill(255, 100); //should create a rgb color pick for users
   
         push();
         translate(this.position.x, this.position.y); // Move to boid location
         rotate(theta); // Rotate based on velocity
-  
-        // Draw triangle 
-        let r = 5; // Size of boid // I think it is reasonable that as triangle gets bigger, check radius should get bigger
-        triangle(0, -r * 2, -r, r * 2, r, r * 2); 
-        // triangle (x1, y1, x2, y2, x3, y3) // change *2 to change triangle height // change x2 & x3 r to make triangle wider
-        // x1, y1 is the top point. 
-        // x2, y2 is the btm left point. 
-        // x3, y3 is the btm right point
-  
+
+        // Draw triangle (x1, y1, x2, y2, x3, y3) 
+        triangle(0,       -h * size, // top point. 
+                -w * size, h * size, // btm left point. 
+                 w * size, h * size); // btm right point
         pop();    
     }
 }
