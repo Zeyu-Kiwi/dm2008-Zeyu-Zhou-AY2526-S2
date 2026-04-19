@@ -22,7 +22,7 @@ let isPanelCollapsed = false;
 let bgm;// background music
 
 function preload(){
-  bgm = loadSound("assets/bgm01.mp3");
+  bgm = loadSound("assets/bgm02.mp3");
   
 }
 
